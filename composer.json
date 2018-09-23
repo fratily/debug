@@ -1,0 +1,23 @@
+{
+    "name": "fratily/debug",
+    "type": "library",
+    "keywords": [
+        "fratily",
+        "debug"
+    ],
+    "authors": [
+        {
+            "name": "Kento Oka",
+            "email": "kento-oka@kentoka.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fratily\\Debug\\": "src/"
+        }
+    }
+}
