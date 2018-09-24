@@ -18,4 +18,39 @@ namespace Fratily\Debug;
  */
 class Debug{
 
+    private static $enable  = false;
+
+    public static function enable(
+        int $reportLevel = E_ALL
+    ){
+        if(true === self::$enable){
+            return;
+        }
+
+        set_error_handler([static::class, "handleError"]);
+        set_exception_handler([static::class, "handleException"]);
+        register_shutdown_function([static::class, "shutdownCallback"]);
+
+        self::$enable   = true;
+    }
+
+    public static function handleError(
+        int $errno,
+        string $errstr,
+        string $errfile = null,
+        int $errline = null,
+        array $errcontext = []
+    ){
+        if(0 === error_reporting() & $errno){
+            return true;
+        }
+    }
+
+    public static function handleException(\Throwable $e){
+
+    }
+
+    public static function shutdownCallback(){
+
+    }
 }
