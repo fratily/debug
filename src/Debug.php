@@ -35,15 +35,16 @@ class Debug{
     }
 
     public static function handleError(
-        int $errno,
-        string $errstr,
-        string $errfile = null,
-        int $errline = null,
-        array $errcontext = []
+        int $severity,
+        string $message,
+        string $file,
+        int $line
     ){
-        if(0 === error_reporting() & $errno){
-            return true;
+        if(0 === error_reporting() & $severity){
+            return;
         }
+
+        throw new ErrorException($message, 0, $severity, $file, $line);
     }
 
     public static function handleException(\Throwable $e){
