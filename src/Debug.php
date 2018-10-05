@@ -54,4 +54,37 @@ class Debug{
     public static function shutdownCallback(){
 
     }
+
+    public function render(string $tpl, array $contexts = []){
+        $tpl  = __DIR__ . "/../template/" . $tpl;
+
+        if(!is_file($tpl)){
+            return "";
+        }
+
+        $contexts   = array_filter(
+            $contexts,
+            function($k){
+                return 1 === preg_match("/\A[A-Z_][0-9A-Z_]\z/i", $k)
+                    && "tpl" !== $k
+                    && "contexts" !== $k
+                ;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+
+        foreach($contexts as $___key => $___val){
+            $$___key = $___val;
+        }
+
+        ob_start();
+        eval($tpl);
+
+        $result = ob_get_contents();
+
+        ob_end_clean();
+
+        return $result;
+    }
 }
