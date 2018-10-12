@@ -49,7 +49,7 @@ class Debug{
 
     public static function handleException(\Throwable $e){
         try{
-
+            echo $this->render("exception.php", $e);
         }catch(\Throwable $e){
             echo "error occurred in fratily/debug(",
                 $e->getMessage(),
@@ -85,7 +85,7 @@ class Debug{
         $h          = function(...$args){
             call_user_func_array("htmlspecialchars", $args);
         };
-        
+
         unset($_exception);
 
         ob_start();
