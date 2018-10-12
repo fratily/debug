@@ -83,7 +83,7 @@ class Debug{
 
         $exception  = $_exception;
         $h          = function(...$args){
-            call_user_func_array("htmlspecialchars", $args);
+            return call_user_func_array("htmlspecialchars", $args);
         };
 
         unset($_exception);
