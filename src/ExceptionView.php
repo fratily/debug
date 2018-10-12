@@ -22,7 +22,7 @@ class ExceptionView{
 
     public static function getTitle(\Throwable $e){
         $class  = get_class($e);
-        return self::ERR_NAMESPACE === substr($class, 0, strlen(self::ERR_NS))
+        return self::ERR_NS === substr($class, 0, strlen(self::ERR_NS))
             ? substr($class, strlen(self::ERR_NS))
             : $class
         ;
