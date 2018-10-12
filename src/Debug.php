@@ -49,7 +49,7 @@ class Debug{
 
     public static function handleException(\Throwable $e){
         try{
-            echo $this->render("exception.php", $e);
+            echo static::render("exception.php", $e);
         }catch(\Throwable $e){
             echo "error occurred in fratily/debug(",
                 $e->getMessage(),
