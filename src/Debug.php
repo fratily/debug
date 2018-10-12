@@ -48,38 +48,48 @@ class Debug{
     }
 
     public static function handleException(\Throwable $e){
+        try{
 
+        }catch(\Throwable $e){
+            echo "error occurred in fratily/debug(",
+                $e->getMessage(),
+                ") in ",
+                $e->getFile(),
+                " ",
+                $e->getLine()
+            ;
+        }
+
+        die();
     }
 
     public static function shutdownCallback(){
 
     }
 
-    public function render(string $tpl, array $contexts = []){
+    public function render(string $tpl, \Throwable $exception){
         $tpl  = __DIR__ . "/../template/" . $tpl;
 
-        if(!is_file($tpl)){
+        if(!is_file($tpl) && is_readable($tpl)){
             return "";
         }
 
-        $contexts   = array_filter(
-            $contexts,
-            function($k){
-                return 1 === preg_match("/\A[A-Z_][0-9A-Z_]\z/i", $k)
-                    && "tpl" !== $k
-                    && "contexts" !== $k
-                ;
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        $exceptions = [];
+        $_exception = $exception;
 
+        do{
+            $exceptions[]   = $exception;
+        }while(null !== ($exception = $exception->getPrevious()));
 
-        foreach($contexts as $___key => $___val){
-            $$___key = $___val;
-        }
+        $exception  = $_exception;
+        $h          = function(...$args){
+            call_user_func_array("htmlspecialchars", $args);
+        };
+        
+        unset($_exception);
 
         ob_start();
-        eval($tpl);
+        eval(file_get_contents($tpl));
 
         $result = ob_get_contents();
 
