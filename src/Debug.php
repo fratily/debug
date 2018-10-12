@@ -44,7 +44,7 @@ class Debug{
             return;
         }
 
-        throw new ErrorException($message, 0, $severity, $file, $line);
+        throw new \ErrorException($message, 0, $severity, $file, $line);
     }
 
     public static function handleException(\Throwable $e){
