@@ -70,7 +70,7 @@ class Debug{
     public static function render(string $tpl, \Throwable $exception){
         $tpl  = __DIR__ . "/../template/" . $tpl;
 
-        if(!is_file($tpl) && is_readable($tpl)){
+        if(!is_file($tpl) && !is_readable($tpl)){
             return "";
         }
 
