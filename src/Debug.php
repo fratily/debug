@@ -16,22 +16,51 @@ namespace Fratily\Debug;
 /**
  *
  */
-class Debug{
+final class Debug{
 
-    private static $enable  = false;
+    const HANDLER_ERROR     = [self::class, "handleError"];
+    const HANDLER_EXCEPTION = [self::class, "handleException"];
+    const HANDLER_SHUTDOWN  = [self::class, "handleShutdown"];
 
-    public static function enable(
-        int $reportLevel = E_ALL
-    ){
-        if(true === self::$enable){
-            return;
+    /**
+     * @var string
+     */
+    private static $handler = Handler\SimpleHandler::class;
+
+    /**
+     * ハンドラを設定する
+     *
+     * @param   string  $class
+     *  登録するハンドラクラス
+     *
+     * @return  void
+     *
+     * @throws  \InvalidArgumentException
+     */
+    public static function setHandler(string $class){
+        if(!class_exists($class)){
+            throw new \InvalidArgumentException;
         }
 
-        set_error_handler([static::class, "handleError"]);
-        set_exception_handler([static::class, "handleException"]);
-        register_shutdown_function([static::class, "shutdownCallback"]);
+        if(!is_subclass_of($class, Handler\HandlerInterface::class)){
+            throw new \InvalidArgumentException;
+        }
 
-        self::$enable   = true;
+        self::$handler  = $class;
+    }
+
+    /**
+     * エラーハンドリングを有効化する
+     *
+     * 有効化した場合、このクラスからエラーハンドリングを無効化することは
+     * できません。個別でrestore関数を呼んでください。
+     *
+     * @return  void
+     */
+    public static function enable(){
+        set_error_handler(self::HANDLER_ERROR);
+        set_exception_handler(self::HANDLER_EXCEPTION);
+        register_shutdown_function(self::HANDLER_SHUTDOWN);
     }
 
     public static function handleError(
